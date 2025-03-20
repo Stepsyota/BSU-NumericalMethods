@@ -23,23 +23,23 @@ int main()
     double b = 2.631;
     double eps = pow(10, -5);
 
-    cout << "|" << setw(49) << "The trapezoid method" << setw(29) << "|" << endl;
-    cout << "|" << setw(10) << "n" << setw(10) << "|" << setw(19) << "Integral 1" << setw(10) << "|" << setw(19) << "Integral 2" << setw(10) << "|" << endl;
-    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    cout << "|" << setw(59) << "The trapezoid method" << setw(39) << "|" << endl;
+    cout << "|" << setw(10) << "n1" << setw(10) << "|" << setw(19) << "Integral 1" << setw(10) << "|" << setw(10) << "n2" << setw(10) << "|" << setw(19) << "Integral 2" << setw(10) << "|" << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     trapez_method(f_x, a, b, eps);
 
-    cout << "|" << setw(49) << "The Simpson method" << setw(29) << "|" << endl;
-    cout << "|" << setw(10) << "n" << setw(10) << "|" << setw(19) << "Integral 1" << setw(10) << "|" << setw(19) << "Integral 2" << setw(10) << "|" << endl;
-    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    cout << "|" << setw(59) << "The Simpson method" << setw(39) << "|" << endl;
+    cout << "|" << setw(10) << "n1" << setw(10) << "|" << setw(19) << "Integral 1" << setw(10) << "|" << setw(10) << "n2" << setw(10) << "|" << setw(19) << "Integral 2" << setw(10) << "|" << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     simpson_method(f_x, a, b, eps);
 
     double a1 = 0;
     double b1 = 4.0;
     double c1 = 1.0;
     double d1 = 2.0;
-    cout << "|" << setw(49) << "The Simpson Cubature method" << setw(29) << "|" << endl;
-    cout << "|" << setw(5) << "N" << setw(5) << "|" << setw(5) << "M" << setw(5) << "|" << setw(19) << "Integral 1" << setw(10) << "|" << setw(19) << "Integral 2" << setw(10) << "|" << endl;
-    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    cout << "|" << setw(59) << "The Simpson Cubature method" << setw(39) << "|" << endl;
+    cout << "|" << setw(5) << "N" << setw(5) << "|" << setw(5) << "M" << setw(5) << "|" << setw(19) << "Integral 1" << setw(10) << "|" << setw(5) << "N" << setw(5) << "|" << setw(5) << "M" << setw(5) << "|" << setw(19) << "Integral 2" << setw(10) << "|" << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cubature_simpson_method(f_xy, a1, b1, c1, d1, eps, 1, 1);
 
     return 0;
@@ -52,10 +52,10 @@ double f_x(double x) {
 void trapez_method(double (*function)(double),double a, double b, double eps, int n) {
     double integral_h = trapez_calc(f_x,a, b, n/2);
     double integral_h2 = trapez_calc(f_x,a, b, n);
-    cout << "|" << setw(10) << n << setw(10) << "|" << setw(19) << integral_h << setw(10) << "|" << setw(19) << integral_h2 << setw(10) << "|" << endl;
+    cout << "|" << setw(10) << n << setw(10) << "|" << setw(19) << integral_h << setw(10) << "|" << setw(10) << 2 * n << setw(10) << "|" << setw(19) << integral_h2 << setw(10) << "|" << endl;
     if (abs(integral_h - integral_h2) <= 3 * eps) {
-        cout << "|" << setw(25)  << "The answer: " << setprecision(6) << integral_h2 << " when divided into " << n <<  " segments" << setw(14) << "|" << endl;
-        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "|" << setw(35)  << "The answer: " << setprecision(6) << integral_h2 << " when divided into " << 2 * n <<  " segments" << setw(24) << "|" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     }
     else {
         trapez_method(f_x, a, b, eps, n * 2);
@@ -78,10 +78,10 @@ void simpson_method(double (*function)(double), double a, double b, double eps, 
     }
     double integral_h = simpson_calc(f_x, a, b, n / 2);
     double integral_h2 = simpson_calc(f_x, a, b, n);
-    cout << "|" << setw(10) << n << setw(10) << "|" << setw(19) << integral_h << setw(10) << "|" << setw(19) << integral_h2 << setw(10) << "|" << endl;
+    cout << "|" << setw(10) << n << setw(10) << "|" << setw(19) << integral_h << setw(10) << "|" << setw(10) << 2 * n << setw(10) << "|" << setw(19) << integral_h2 << setw(10) << "|" << endl;
     if (abs(integral_h - integral_h2) <= 15 * eps) {
-        cout << "|" << setw(25) << "The answer: " << setprecision(6) << integral_h2 << " when divided into " << n << " segments" << setw(15) << "|" << endl;
-        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "|" << setw(35) << "The answer: " << setprecision(6) << integral_h2 << " when divided into " << 2 * n << " segments" << setw(25) << "|" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     }
     else {
         simpson_method(f_x, a, b, eps, n * 2);
@@ -112,10 +112,10 @@ double f_xy(double x, double y) {
 void cubature_simpson_method(double (*function)(double, double), double a, double b, double c, double d, double eps, int N, int M) {
     double integral_h = cubature_simpson_calc(a, b, c, d, N, M);
     double integral_h2 = cubature_simpson_calc(a, b, c, d, 2* N, 2* M);
-    cout << "|" << setw(5) << N << setw(5) << "|" << setw(5) << M << setw(5) << "|" << setw(19) << integral_h << setw(10) << "|" << setw(19) << integral_h2 << setw(10) << "|" << endl;
+    cout << "|" << setw(5) << 2 * N << setw(5) << "|" << setw(5) << 2 * M << setw(5) << "|" << setw(19) << integral_h << setw(10) << "|" << setw(5) << 4 * N << setw(5) << "|" << setw(5) << 4 * M << setw(5) << "|" << setw(19) << integral_h2 << setw(10) << "|" << endl;
     if (abs(integral_h - integral_h2) <= 15 * eps) {
-        cout << "|" << setw(25) << "The answer: " << setprecision(6) << integral_h2 << " when divided into " << 2* N  << ", " << 2 * M << " segments" << setw(14) << "|" << endl;
-        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "|" << setw(35) << "The answer: " << setprecision(6) << integral_h2 << " when divided into " << 4* N  << ", " << 4 * M << " segments" << setw(24) << "|" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     }
     else {
         cubature_simpson_method(f_xy, a, b, c, d, eps, 2*N, 2*M);
