@@ -1,104 +1,114 @@
 ﻿#include <iostream>
+#include <vector>
+#include <cmath>
 
 using namespace std;
 
-const int n = 3;
-int main()
-{
-    int A[3][3]{ {6, 13, -17}, {13, 29, -38}, {-17, -38, 50} };
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            cout << A[i][j] << '\t';
-        }
-        cout << endl;
-    }
-    int b[3][1]{ {2}, {4}, {-5} };
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 1; ++j) {
-            cout << b[i][j] << '\t';
-        }
-        cout << endl;
-    }
+vector<double> Gauss_solution(vector<vector<double>> A, vector<double> b) {
+	int size = A.size();
+	vector<int> IOR(size);
+	vector<double> x(size);
 
-    //int IOR[3];
-    //for (int i = 0; i < n; ++i) {
-    //    IOR[i] = i;
-    //}
-    //for (int i = 0; i < n; ++i) {
-    //    cout << IOR[i] << '\t';
-    //}
-    //cout << endl;
+	for (int i = 0; i < size; ++i) {
+		IOR[i] = i;
+	}
 
-    //for (int i = 0; i < n; ++i) {
-    //    int AKK = 0;
-    //    int num_str_AKK = i;
-    //    for (int j = 0; j < n; ++j) {
-    //        int index = IOR[j];
-    //        if (abs(A[index][i]) > AKK) {
-    //            AKK = abs(A[index][i]);
-    //            num_str_AKK = i;
-    //            cout << "AKK " << AKK << endl;
-    //            cout << "i " << num_str_AKK << "\tj " << j << endl;
-    //        }
-    //    }
+	for (int k = 0; k < size; ++k) {
+		int index_max_el = k;
+		double max_value = A[IOR[k]][k];
 
-    //    if (AKK == 0) {
-    //        cout << "Error. Matrix str 0" << endl;
-    //        exit(1);
-    //    }
+		for (int i = k + 1; i < size; ++i) {
+			if (abs(A[IOR[i]][k]) > abs(max_value)) {
+				max_value = A[IOR[i]][k];
+				index_max_el = i;
+			}
+		}
+		if (index_max_el != k) {
+			swap(IOR[index_max_el], IOR[k]);
+		}
 
-    //    swap(IOR[i], IOR[num_str_AKK]);
-    // }
-    gauss(A, b);
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		cout << "1:\n";
+		for (int i = 0; i < size; ++i) {
+			for (int j = 0; j < size; ++j) {
+				cout << A[IOR[i]][j] << '\t';
+			}
+			cout << endl;
+		}
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return 0;
+
+		if (abs(max_value) < 1e-10) {
+			cout << "Matrix has a zero column!\n";
+			return vector<double>(size, 0);
+		}
+
+		double main_element = max_value;
+		for (int j = k; j < size; ++j) {
+			A[IOR[k]][j] /= main_element;
+		}
+		b[IOR[k]] /= main_element;
+
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		cout << "2:\n";
+		for (int i = 0; i < size; ++i) {
+			for (int j = 0; j < size; ++j) {
+				cout << A[IOR[i]][j] << '\t';
+			}
+			cout << endl;
+		}
+		cout << "b:\n";
+		for (int j = 0; j < size; ++j) {
+			cout << b[IOR[j]] << '\n';
+		}
+		cout << endl;
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		for (int i = k + 1; i < size; ++i) {
+			int str_now = IOR[i];
+			double divider = A[str_now][k];
+
+			for (int j = k; j < size; ++j) {
+				A[str_now][j] -= divider * A[IOR[k]][j];
+			}
+			b[str_now] -= divider * b[IOR[k]];
+		}
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		cout << "3:\n";
+		for (int i = 0; i < size; ++i) {
+			for (int j = 0; j < size; ++j) {
+				cout << A[IOR[i]][j] << '\t';
+			}
+			cout << endl;
+		}
+		cout << "b:\n";
+		for (int j = 0; j < size; ++j) {
+			cout << b[IOR[j]] << '\n';
+		}
+		cout << endl;
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		for (int k = size - 1; k >= 0; --k) {
+			x[k] = b[IOR[k]];
+			for (int j = k + 1; j < size; ++j) {
+				x[k] -= A[IOR[k]][j] * x[j];
+			}
+		}
+	}
+	return x;
 }
 
-void gauss(int a[][n], int b[][1]) {
-    int IOR[3];
-    for (int i = 0; i < n; ++i) {
-        IOR[i] = i;
-    }
+int main()
+{
+	vector<vector<double>> A =
+	{{6, 13, -17},
+	{13, 29, -38},
+	{-17, -38, 50}};
 
-    // Прямой ход
-    for (int k = 0; k < n; ++k) {
-        // Поиск главного элемента
-        double AKK = 0.0;
-        int p = k;
-        for (int i = k; i < n; ++i) {
-            int index = IOR[i];
-            if (fabs(a[index][k]) > AKK) {
-                AKK = fabs(a[index][k]);
-                p = i;
-            }
-        }
-
-        // Проверка на вырождение матрицы
-        if (AKK == 0.0) {
-            cout << "Matrix is singular!" << endl;
-            exit(1);
-        }
-
-        // Перестановка строк
-        swap(IOR[k], IOR[p]);
-
-        // Выбор ведущего элемента
-        int lead = IOR[k];
-        double AMAIN = a[lead][k];
-
-        // Исключение переменной x_k
-        for (int j = k; j < n; ++j) {
-            a[lead][j] /= AMAIN;
-        }
-        b[lead] /= AMAIN;
-
-        for (int i = k + 1; i < n; ++i) {
-            int row = IOR[i];
-            double multiplier = a[row][k];
-            for (int j = k; j < n; ++j) {
-                a[row][j] -= multiplier * a[lead][j];
-            }
-            b[row] -= multiplier * b[lead];
-        }
-    }
+	vector<double> b = { 2, 4, -5 };
+	vector<double> x = Gauss_solution(A, b);
+	for (int j = 0; j < x.size(); ++j) {
+		cout << x[j] << '\n';
+	}
+	cout << endl;
 }
